@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MacroSettimanaliComponent } from './macro-settimanali.component';
+import { MacrosettimanaliComponent } from './macrosettimanali.component';
 
-describe('MacroSettimanaliComponent', () => {
-  let component: MacroSettimanaliComponent;
-  let fixture: ComponentFixture<MacroSettimanaliComponent>;
+describe('MacrosettimanaliComponent', () => {
+  let component: MacrosettimanaliComponent;
+  let fixture: ComponentFixture<MacrosettimanaliComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MacroSettimanaliComponent ]
+      declarations: [ MacrosettimanaliComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MacroSettimanaliComponent);
+    fixture = TestBed.createComponent(MacrosettimanaliComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

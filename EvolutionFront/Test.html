@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bootstrap Table with Add and Delete Row Feature</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"></style>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+<style type="text/css">
+    body {
+        color: #404E67;
+        background: #F5F7FA;
+		font-family: 'Open Sans', sans-serif;
+	}
+	.table-wrapper {
+		width: 700px;
+		margin: 30px auto;
+        background: #fff;
+        padding: 20px;	
+        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    }
+    .table-title {
+        padding-bottom: 10px;
+        margin: 0 0 10px;
+    }
+    .table-title h2 {
+        margin: 6px 0 0;
+        font-size: 22px;
+    }
+    .table-title .add-new {
+        float: right;
+		height: 30px;
+		font-weight: bold;
+		font-size: 12px;
+		text-shadow: none;
+		min-width: 100px;
+		border-radius: 50px;
+		line-height: 13px;
+    }
+	.table-title .add-new i {
+		margin-right: 4px;
+	}
+    table.table {
+        table-layout: fixed;
+    }
+    table.table tr th, table.table tr td {
+        border-color: #e9e9e9;
+    }
+    table.table th i {
+        font-size: 13px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+    table.table th:last-child {
+        width: 100px;
+    }
+    table.table td a {
+		cursor: pointer;
+        display: inline-block;
+        margin: 0 5px;
+		min-width: 24px;
+    }    
+	table.table td a.add {
+        color: #27C46B;
+    }
+    table.table td a.edit {
+        color: #FFC107;
+    }
+    table.table td a.delete {
+        color: #E34724;
+    }
+    table.table td i {
+        font-size: 19px;
+    }
+	table.table td a.add i {
+        font-size: 24px;
+    	margin-right: -1px;
+        position: relative;
+        top: 3px;
+    }    
+    table.table .form-control {
+        height: 32px;
+        line-height: 32px;
+        box-shadow: none;
+        border-radius: 2px;
+    }
+	table.table .form-control.error {
+		border-color: #f50000;
+	}
+	table.table td .add {
+		display: none;
+	}
+</style>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('[data-toggle="tooltip"]').tooltip();
+	
+	// Append table with add row form on add new button click
+    $(".add-new").click(function(){
+		$(this).attr("disabled", "disabled");
+		var index = $("table tbody tr:last-child").index();
+		var funzione = "onclick=\"ajaxInsert(document.getElementById('nome').value.trim(), document.getElementById('cognome').value.trim(), document.getElementById('email').value.trim(), document.getElementById('password').value.trim());\"";
+		var actions = "<a class='btn' " + funzione +" title='Addinsert' data-toggle='tooltip'><i class='material-icons'>&#xE03B;</i></a>";
+        var row = '<tr>' +
+            '<td><input disabled="disabled" type="text" class="form-control" name="id" id="id"></td>' +
+            '<td><input type="text" class="form-control" name="nome" id="nome"></td>' +
+            '<td><input type="text" class="form-control" name="cognome" id="cognome"></td>' +
+            '<td><input type="text" class="form-control" name="email" id="email"></td>' +
+            '<td><input type="text" class="form-control" name="password" id="password"></td>' +
+			'<td>' + actions + '</td>' +
+        '</tr>';
+    	$("table").append(row);		
+		$("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
+        $('[data-toggle="tooltip"]').tooltip();
+       
+    });
+	// Add row griglia
+	$(document).on("click", ".add", function(){
+		  var id = document.getElementById("idinsert_class_id sorting_1").value.trim();
+		  var nome =  $("#idinsert_class_nome").val();
+		  var cognome =  $("#idinsert_class_cognome").val();
+		  var email = document.getElementById("idinsert_class_email").value.trim();
+		  var password = document.getElementById("idinsert_class_password").value.trim() ;
+		  var pagina = "../RestCall/User";
+		  
+		  
+		  
+		   var empty = false;
+			var input = $(this).parents("tr").find('input[type="text"]');
+	        input.each(function(){
+				if(!$(this).val()){
+					$(this).addClass("error");
+					empty = true;
+				} else{
+	                $(this).removeClass("error");
+	            }
+			});
+			$(this).parents("tr").find(".error").first().focus();
+			if(!empty){
+				input.each(function(){
+					$(this).parent("td").html($(this).val());
+				});			
+				$(this).parents("tr").find(".add, .edit").toggle();
+				$(".add-new").removeAttr("disabled");
+			}		
+		  
+		  
+		  
+		  
+		ajaxModifica(pagina,id,nome,cognome,email,password,this)
+		
+    });
+	// Edit row on edit button click
+	$(document).on("click", ".edit", function(){		
+        $(this).parents("tr").find("td:not(:last-child)").each(function(){
+        	var idnuovo =  $(this).attr("class").trim();
+        	idnuovo="idinsert_" + idnuovo;
+        	if(!$(this).attr("class").indexOf('class_id')){//se la classe contiene class id, va disabilitata la modifica
+				$(this).html('<input disabled="disabled" id="' + idnuovo + '" class="form-control" type="text" class="form-control" value="' + $(this).text() + '">');
+        	}else{//l'id, per trovarlo dopo, diventa la classe con davanti:idinsert_
+        		$(this).html('<input type="text" id="' + idnuovo + '" class="form-control" value="' + $(this).text() + '">');
+        	}
+		});		
+		$(this).parents("tr").find(".add, .edit").toggle();
+		$(".add-new").attr("disabled", "disabled");
+    });
+	// Delete row on delete button click
+	$(document).on("click", ".delete", function(){
+		//quando si clicca sull'elimina legge il dato da mettere nella modale
+		var nomecalcolo = $(this).parents("tr").children('.class_nome').html();
+		//da quello cliccato va al padre riga, poi cerca il figlio colonna con la classe class_id e il suo contenuto
+		$("#myModalLabel" ).html("Sicuro di voler elimiare l'utente "+nomecalcolo+"?");	
+		//inoltre la modale archivia l'id del dato da cancellare in una sua hiden label
+		var iddaeliminare = $(this).parents("tr").children('.class_id').html();
+		$("#iddaeliminare" ).html(iddaeliminare);	
+		//passo ad una variabile globale la riga che verrà eventualmente, dopo conferma, eliminata della griglia
+		tr = $(this).parents("tr");		
+		ajaxContext(tr,iddaeliminare);
+    });
+});
+</script>
+</head>
+<body>
+    <div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>Utenti <b>Lista</b></h2></div>
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+                    </div>
+                      <table id="userTable" class="display table table-bordered">
+	                <thead>
+	                    <tr>
+	                        <th style="width: 10%;" >Id</th>
+	                        <th style="width: 15%;" >Nome</th>
+	                        <th style="width: 15%;" >Cognome</th>
+	                        <th style="width: 20%;" >Email</th>
+	                        <th style="width: 20%;" >Password</th>
+			                <th style="width: 20%;" ></th>
+			                    </tr>
+			                </thead>
+			                <tbody>      
+		                </tbody>
+		           	 </table>
+                </div>
+            </div>
+        </div>
+    </div>     
+</body>
+
+
+<div style="display: block;" id=mainAlertMessage class="alert @message.CssClassName alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <div style="text-align: center"><strong>Messaggi</strong> <br>
+  <strong><div style="text-align: center" id="messaggio" style="float:right; top:60px; padding-right: 10px" >Nessun messaggio...</div><strong>
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+function updateTabel(listaUser){
+	 $('#userTable').dataTable({
+	        data: listaUser,
+	        columns: [
+	                  { data: 'id', className :'class_id'},
+	                  { data: 'nome', className :'class_nome'},
+	                  { data: 'cognome', className :'class_cognome'},
+	                  { data: 'email', className :'class_email'},
+	                  { data: 'password', className :'class_password'},
+	                  { data: 'bottoni', className :'class_bottoni'}
+	              ],
+	      "language": {
+	    	  "sEmptyTable": "Nessun dato presente nella tabella",
+	    	  "sInfo": "Vista da _START_ a _END_ di _TOTAL_ elementi",
+	    	  "sInfoEmpty": "Vista da 0 a 0 di 0 elementi",
+	    	  "sInfoFiltered": "(filtrati da _MAX_ elementi totali)",
+	    	  "sInfoPostFix": "",
+	    	  "sInfoThousands": ",",
+	    	  "sLengthMenu": "Visualizza _MENU_ elementi",
+	    	  "sLoadingRecords": "Caricamento...",
+	    	  "sProcessing": "Elaborazione...",
+	    	  "sSearch": "Cerca:",
+	    	  "sZeroRecords": "La ricerca non ha portato alcun risultato.",
+	    	  "oPaginate": {
+	    	    "sFirst": "Inizio",
+	    	    "sPrevious": "Precedente",
+	    	    "sNext": "Successivo",
+	    	    "sLast": "Fine"
+	    	  },
+	    	  "oAria": {
+	    	    "sSortAscending": ": attiva per ordinare la colonna in ordine crescente",
+	    	    "sSortDescending": ": attiva per ordinare la colonna in ordine decrescente"
+	    	  }
+	         },//lenguage
+	        "pageLength": 5,//numero elementi per pagina
+	        "dom":' <"search"fl><"top">rt<"bottom"ip><"clear">'
+	    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//	---------------------------------------------------   AJAX  ------------------------------------------------
+	
+//		UPDATE
+	function ajaxModifica(pagina,id,nome,cognome,email,password,row)
+		{
+		   $.ajax({
+		     type: "PUT",
+		     url: pagina,
+			     data: {id: id, nome: nome, cognome: cognome, email: email, password: password},
+//			     data:updatedData,
+		     success: function (responseText) {  
+		    	 $(function () { 
+		    		 	$("#messaggio").html(responseText);
+		    		 	$('#mainAlertMessage').show();
+		    		    var duration = 4000; // 4 seconds
+		    		    setTimeout(function () { 
+		    		    	
+		    		    	
+		    		    	
+		    		    	
+		    		    	$('#mainAlertMessage').toggle();
+		    		    	}, duration);
+		    		});
+		    	 
+	        },  
+	        error: function (responseText) { 
+	      	 	$('#messaggio').html(responseText);
+	        }  
+		   });
+		   
+		   
+
+		   
+		   
+		   
+		}
+	
+	 
+	function ajaxContext(tr,id)
+	{
+	   	$.ajax({
+	     type: "DELETE",
+	     url: "../RestCall/User",
+	     data: {id: id},
+	     success: function (responseText) {  
+	    	 $(function () { 
+	    		 	$("#messaggio").html(responseText);
+	    		 	$('#mainAlertMessage').show();
+	    		    var duration = 4000; // 4 seconds
+	    		    setTimeout(function () { 
+	    		    	$('#mainAlertMessage').toggle();
+	    		    	tr.remove();//tolgie riga
+	    		    	$(".add-new").removeAttr("disabled");}, duration);
+	    		});
+        },  
+        error: function (responseText) { 
+      	 	$('#messaggio').html(responseText);
+        }  
+	   });
+	}
+	
+	
+	//insert
+	function ajaxInsert(nome,cognome,email,password)
+	{
+	   $.ajax({
+	     type: "POST",
+	     url: "../RestCall/User",
+	     data: { nome: nome, cognome: cognome, email: email,password:password},
+	     success: function(data) {
+	    	 $(function () { 
+	    		 	$("#messaggio").html(data);
+	    		 	$('#mainAlertMessage').show();
+	    		    var duration = 4000; // 4 seconds
+	    		    setTimeout(function () { $('#mainAlertMessage').toggle();
+	    		    location.reload(); }, duration);
+	    		});
+	    	    
+	    	    
+	     },
+	     error: function(data) {
+	         alert("Errore ajax"+data);
+	  	}
+	   });
+	}
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+//	--------------------------------------- DOCUMENT READY --------------------------------------
+
+
+
+
+
+
+
+<!-- -------------- RIEMPE TABELLA CO DATI   ------------ -->
+$(document).ready(function(){
+$.ajax({  
+    url: '../RestCall/User',  
+    type: 'GET',  
+    dataType: 'json', 
+    success: function (responseText) {  
+    	var listaUser=(responseText);  
+    	updateTabel(listaUser);
+    },  
+    error: function (responseText) { 
+  	 $('#messaggio').text(responseText);
+    }  
+});  
+});
+
+
+
+</script>
+</html>                            

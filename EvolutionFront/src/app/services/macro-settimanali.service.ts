@@ -1,8 +1,9 @@
-import { Injectable,OnInit } from '@angular/core';
-import {Output,EventEmitter} from '@angular/core';//per dati da qui a padre
-//import { Http, Response } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
+
+
 
 import { environment } from '../../environments/environment'; //il file dove sono contenute costanti come gli indirizzi server json
 //import { Subscription } from 'rxjs';
@@ -14,30 +15,45 @@ const API_EVOLUTION_MACRO_GETALL = environment.urlBase + environment.urlMacro;
   providedIn: 'root'
 })
 export class MacroSettimanaliService {
-	listaMacro: Observable<MacroSettimanali[]>;
-  
-	@Output() eventoEmitter = new EventEmitter<MacroSettimanali[]>();
 	
-	
-	
-	constructor(private httpClient: HttpClient) { }
+	constructor(private http: HttpClient) { }
+
+	// Http Options
+	httpOptions = {
+		headers: new HttpHeaders({
+		'Content-Type': 'application/json'
+		})
+	}  
+
+	getArray() {
+	   return this.http.get(API_EVOLUTION_MACRO_GETALL);
+	}
+
+
+// HttpClient API get() method => Fetch employees list
+	getAll(): Observable<MacroSettimanali> {
+		return this.http.get<MacroSettimanali>(API_EVOLUTION_MACRO_GETALL)
+		.pipe(
+		retry(1),
+		catchError(this.handleError)
+		)
+	}
 
 
 
-   public getAll(): Observable<MacroSettimanali[]> {
-	   
-
-        this.httpClient.get(API_EVOLUTION_MACRO_GETALL).subscribe((res)=>{
-            console.log(res);
-        });
-	
-	// 	var parsejson: Observable<Utenti[]> = laResponse.map(response => {
-    //   return response.json();
-    // 	});
-
-    return null;
-  }
-
+     // Error handling 
+	handleError(error) {
+		let errorMessage = '';
+		if(error.error instanceof ErrorEvent) {
+		// Get client-side error
+		errorMessage = error.error.message;
+		} else {
+		// Get server-side error
+		errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+		}
+		window.alert(errorMessage);
+		return throwError(errorMessage);
+	}
 
 
 

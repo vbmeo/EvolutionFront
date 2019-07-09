@@ -1,0 +1,140 @@
+
+<!-- 
+<div class="container custom-container-2">
+
+  <div class="no-data text-center" *ngIf="macroSettimanali.length == 0">
+    <p>Macro Settimanali</p>
+    <button class="btn btn-outline-primary" routerLink="/insert-macro">Add Macro</button>
+  </div>
+
+  <!-- Employees list table, it hides when there is no employee 
+  <div *ngIf="macroSettimanali.length !== 0">
+    <h3 class="mb-3 text-center">Macro </h3>
+
+	<div class="col-md-10 col-md-offset-1">
+		<div class="panel panel-default panel-table">
+				<div class="panel-heading">
+					<div class="row">
+					<div class="col col-xs-6">
+						<h3 class="panel-title">Panel Heading</h3>
+					</div>
+					<div class="col col-xs-6 text-right">
+						<button type="button" class="btn btn-sm btn-primary btn-create">Create New Task</button>
+					</div>
+					</div>
+				</div>
+			<div class="panel-body">
+			<table class="table table-striped table-bordered table-list">
+				<thead>
+				<tr>
+					<th scope="col">Id</th>
+					<th scope="col">Data</th>
+					<th scope="col">Calorie TOT</th>
+					<th scope="col">Carboidrati</th>
+					<th scope="col">Proteine</th>
+					<th scope="col">Grassi</th>
+					<th scope="col">Alcool</th>
+					<th scope="col"><em class="fa fa-cog"></em></th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr *ngFor="let macro of macroSettimanali">
+					<td>{{macro.id}}</td>
+					<td>{{macro.data}}</td>
+					<td>{{macro.calorie_sett}}</td>
+					<td>{{macro.carboidrati_sett}}</td>
+					<td>{{macro.proteine_sett}}</td>
+					<td>{{macro.grassi_sett}}</td>
+					<td>{{macro.alcool_sett}}</td>
+					<td align="center">
+						<a class="btn btn-default"><em class="fa fa-pencil"></em></a>
+						<a class="btn btn-danger"><em class="fa fa-trash"></em></a>                       
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			</div>
+
+ 
+			<div class="btn-toolbar" role="toolbar" style="margin: 0;">
+					<div class="btn-group">
+						<label style="margin-top:10px">Page {{currentIndex}}/{{pageNumber}}</label>
+						</div>
+						<div class="btn-group pull-right">
+						<ul class="pagination" >
+							<li [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" ><a  (click)="prevPage()" href="#">Prev</a></li>
+								<li *ngFor="let page of pagesIndex"  [ngClass]="{'active': (currentIndex == page)}">
+									<a (click)="setPage(page)" href="#" >{{page}}</a>
+								</li>
+							<li [ngClass]="{'disabled': (currentIndex == pageNumber || pageNumber == 0)}" ><a   (click)="nextPage()" href="#">Next</a></li>
+						</ul>
+				</div>
+			</div>
+
+
+
+
+
+		</div>
+	</div>
+  </div>
+
+</div> -->
+
+<div class="container custom-container-2">
+	 <div class="no-data text-center" *ngIf="macroSettimanali.length == 0">
+		<p>Macro Settimanali</p>
+		<button class="btn btn-outline-primary" routerLink="/insert-macro">Add Macro</button>
+	</div>
+         <label>Filter </label>
+         <input  type="text"  id="inputName" [(ngModel)]="inputName"/>
+         <input type="button"  value="Apply"/>
+   </div>
+ <div class="col-md-10 col-md-offset-1">
+	<div class="panel panel-default panel-table">
+    <!-- Default panel contents -->
+    <div class='panel-heading'>Product List</div>
+    <div class='panel-body'>
+         <table class="table table-striped table-bordered table-list">
+            <thead>
+              <th scope="col">Id</th>
+				<th scope="col">Data</th>
+				<th scope="col">Calorie TOT</th>
+				<th scope="col">Carboidrati</th>
+				<th scope="col">Proteine</th>
+				<th scope="col">Grassi</th>
+				<th scope="col">Alcool</th>
+				<th scope="col"><em class="fa fa-cog"></em></th>
+            </thead>
+            <tbody>
+               <tr *ngFor="let macro of items">
+                 <td>{{macro.id}}</td>
+					<td>{{macro.data}}</td>
+					<td>{{macro.calorie_sett}}</td>
+					<td>{{macro.carboidrati_sett}}</td>
+					<td>{{macro.proteine_sett}}</td>
+					<td>{{macro.grassi_sett}}</td>
+					<td>{{macro.alcool_sett}}</td>
+					<td align="center">
+						<a class="btn btn-default"><em class="fa fa-pencil"></em></a>
+						<a class="btn btn-danger"><em class="fa fa-trash"></em></a>                       
+					</td>
+               </tr>
+            </tbody>
+         </table>
+         <div class="btn-toolbar" role="toolbar" style="margin: 0;">
+          <div class="btn-group">
+               <label style="margin-top:10px">Page {{currentIndex}}/{{pageNumber}}</label>
+            </div>
+            <div class="btn-group pull-right">
+               <ul class="pagination" >
+                  <li [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" ><a  (click)="prevPage()" href="#">Prev</a></li>
+                     <li *ngFor="let page of pagesIndex"  [ngClass]="{'active': (currentIndex == page)}">
+                        <a (click)="setPage(page)" href="#" >{{page}}</a>
+                     </li>
+                  <li [ngClass]="{'disabled': (currentIndex == pageNumber || pageNumber == 0)}" ><a   (click)="nextPage()" href="#">Next</a></li>
+               </ul>
+            </div>
+         </div>
+      </div>
+   </div>   
