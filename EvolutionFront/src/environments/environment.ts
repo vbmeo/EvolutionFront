@@ -6,7 +6,11 @@ export const environment = {
   production: false,
   urlBase: 'http://localhost:8080/evolution2/',//l'indirizzo del server json
   urlMacro: 'macro',
-  urlGetAll: ''
+  urlGetAll: '',
+  //paginazione tabelle 
+  numeroMaxRecordPerTabellaMacro : 7,
+  inizioDaPagina:1,
+  numeroMassimopagineDelFooter : 5
 };
 
 /*

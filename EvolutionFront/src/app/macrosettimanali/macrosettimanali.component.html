@@ -135,51 +135,18 @@
 			<ul class="pagination">
 				<!-- ex disabled -->
 				<li class="page-item ">
-					<a class="page-link" (click)="setPage(currentIndex-1)" href="#" tabindex="-1">Previous</a>
+					<a class="page-link" (click)="prevPage()" href="#" tabindex="-1">Previous</a>
 				</li>
 				<!-- se la pagina corrente è uguale a quella che sta ciclando cambia lo stile in attivo -->
-				<li class="page-item" *ngFor="let page of pagesIndex" [ngClass]="{'page-item active': (currentIndex == page)}">
+				<li class="page-item" *ngFor="let page of arrayConNumerazionePaginePerFooter" [ngClass]="{'page-item active': (paginaCorrente == page)}">
 					<a (click)="setPage(page)" class="page-link" href="#">{{page}}</a>
 				</li>			
 				<li class="page-item">
-					<a class="page-link" (click)="setPage(currentIndex+1)" href="#">Next di {{pageNumber}} pagine/</a>
+					<a class="page-link" (click)="nextPage()" href="#">Next di {{numeroDiPagineTotali}} pagine</a>
 				</li>
 			</ul>
 			</nav>
 
-			<div class="panel-footer">
-                <div class="row">
-                  <div class="col col-xs-4">Page {{currentIndex}}/{{pageNumber}}
-                  </div>
-                  <div class="col col-xs-8">
-                    <ul class="pagination hidden-xs pull-right">
-					  <li class="page-link" *ngFor="let page of pagesIndex"><a (click)="setPage(page)" href="#" >{{page}}</a></li> 
-                    </ul>
-                    <ul class="pagination visible-xs pull-right">
-                        <li><a href="#">«</a></li>
-                        <li><a href="#">»</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-
-
-				<!-- <div class="btn-toolbar" role="toolbar" style="margin: 0;">
-					<div class="btn-group">
-					<label style="margin-top:10px">Page {{currentIndex}}/{{pageNumber}}</label>
-					<div class="btn-group pull-right">
-						<ul class="pagination" >
-							<li [ngClass]="{'disabled': (currentIndex == 1 || pageNumber == 0)}" >
-								<a  (click)="prevPage()" href="#">Prev</a></li>
-								<li *ngFor="let page of pagesIndex"  [ngClass]="{'active': (currentIndex == page)}">
-									<a (click)="setPage(page)" href="#" >{{page}}</a>
-								</li>
-							<li [ngClass]="{'disabled': (currentIndex == pageNumber || pageNumber == 0)}" ><a   (click)="nextPage()" href="#">Next</a></li>
-						</ul>
-						</div>
-					</div>
-				</div> -->
 
 
 
