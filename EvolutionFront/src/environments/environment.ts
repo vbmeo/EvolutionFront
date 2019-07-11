@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-   urlBase: 'http://localhost:8080/evolution2/',//l'indirizzo del server json
+  urlBase: 'http://localhost:8080/evolution2/',//l'indirizzo del server json
   urlMacro: 'macro',
   urlGetAll: ''
 };

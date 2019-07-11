@@ -21,7 +21,7 @@ export class MacrosettimanaliComponent implements OnInit {
    pageNumber : number = 0;
    currentIndex : number = 1;
    items: any[];
-   pagesIndex : Array<number>;
+   pagesIndex : Array<number>;//array di numeri consecuti x per sfruttare ngfor in html alla fine è come fare un for da 1 a tot
    pageStart : number = 1;
    inputName : string = '';
    totalItem : number =0;
@@ -51,7 +51,7 @@ export class MacrosettimanaliComponent implements OnInit {
 						this.definisciPageNumber(this.macro.length);
 						
 						this.definisciPrimaPaginaDiDati(result);
-
+						this.definisciPageIndex(result);
 						//ciclo per trasferire in array ma non serve a niente
 						//perchè lo fa dopo i metodi normali che si chiedono quNTO è LUNGO ECC...
 						// result.forEach(element => {
@@ -69,33 +69,74 @@ export class MacrosettimanaliComponent implements OnInit {
 		)
 
 		this.refreshItems();
+
   }
 
+//quando doc pronto
+  	 ngAfterViewInit(): void {
+	// 	  alert("ngAfterViewInit");
+	// 	   $('#tabellaMacro').dataTable( {
+	// 		'language': {
+	// 			"decimal": ",",
+	// 			"thousands": "."
+    //     }
+	// } );
+	
+    //    $('#tabellaMacro').css({'background-color': 'yellow', 'font-size': '200%'});
+	
+			//questo viene prima del caricamento dei dati
+			// $(document).ready(function() {
+			// 	alert("ok");			
+			// } );
+
+			// //questa prorpio non viene cagata
+			// function linkFormatter(value, row) {
+			// 	alert("functionFormatterInteger");
+			// return "value"+value;
+			// }
+
+	 }
 
 definisciPageNumber(macro2lenght : number){
-			this.pageNumber = parseInt(""+ (macro2lenght / this.pageSize));
-								if(macro2lenght % this.pageSize != 0){
-									this.pageNumber ++;
-						}
-						 if(this.pageNumber  < this.pages){
-               				this.pages =  this.pageNumber;
-         				}
-						console.log('definito pageNumber da funzione in ' + this.pageNumber);
+	this.pageNumber = parseInt(""+ (macro2lenght / this.pageSize));
+						if(macro2lenght % this.pageSize != 0){
+							this.pageNumber ++;
+				}
+					if(this.pageNumber  < this.pages){
+					this.pages =  this.pageNumber;
+				}
+				console.log('definito pageNumber da funzione in ' + this.pageNumber);
 }
 
 
 definisciPrimaPaginaDiDati(result : MacroSettimanali[]){
-				this.items= new Array(this.pageSize);//setta l'array				
-						result.forEach(element => {
-							if(this.i<this.pageSize){
-								this.items[this.i]=element;
-								this.i++;
-							}							
-							//console.log('for--', this.macro[(this.i)-1].data);
-						});
+	this.items= new Array(this.pageSize);//setta l'array	
+			//riempe array con dati delle prima pagina			
+			result.forEach(element => {
+				if(this.i<this.pageSize){
+					this.items[this.i]=element;
+					this.i++;
+				}							
+				//console.log('for--', this.macro[(this.i)-1].data);
+			});
 }
 
 	
+
+definisciPageIndex(result : MacroSettimanali[]){
+	//setta array
+	this.pagesIndex = new Array(this.pageNumber);//setta l'array
+	for (let i = 1; i <= this.pageNumber; i++) {
+		this.pagesIndex[i]=i;
+	}
+
+	this.pagesIndex.forEach(element => {
+		console.log('indice pagina..{}', element);
+	});
+}
+
+
+
    fillArray(): any{
       var obj = new Array();
       for(var index = this.pageStart; index< this.pageStart + this.pages; index ++) {
@@ -133,4 +174,12 @@ definisciPrimaPaginaDiDati(result : MacroSettimanali[]){
          this.refreshItems();
     }
 
+
+	integerFormatter(valore: number){
+		console.log('valore da mettere intero--'+valore);
+		let x = Math.round(valore);
+		console.log('valore modificATO intero--'+x);
+		return x;
+		//return  parseInt(valore,10);
+	}
 }
