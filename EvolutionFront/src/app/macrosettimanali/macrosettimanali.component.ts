@@ -8,6 +8,8 @@ import { Component, OnInit,NgModule } from '@angular/core';
 import {MacroSettimanaliService } from '../services/macro-settimanali.service';
 import { environment } from '../../environments/environment';
 
+//import {BaseTableComponent} from '../base-table/base-table.component';
+
 @Component({
   selector: 'app-macrosettimanali',
   templateUrl: './macrosettimanali.component.html',
@@ -31,7 +33,9 @@ export class MacrosettimanaliComponent implements OnInit {
 	primaPaginaFooter : number = 1;
 	ultimaPaginaFooter : number = 1;
 
-  constructor(public macroSettimanaliService: MacroSettimanaliService) { }
+  constructor(public macroSettimanaliService: MacroSettimanaliService) {
+	  //super();
+  }
  
 
   ngOnInit() {
