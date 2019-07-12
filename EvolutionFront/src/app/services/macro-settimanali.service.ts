@@ -7,7 +7,6 @@ import { retry, catchError } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment'; //il file dove sono contenute costanti come gli indirizzi server json
 //import { Subscription } from 'rxjs';
-import { MacroSettimanali } from '../Model/MacroSettimanali';
 
 const API_EVOLUTION_MACRO_GETALL = environment.urlBase + environment.urlMacro;
 
@@ -29,10 +28,11 @@ export class MacroSettimanaliService {
 	   return this.http.get(API_EVOLUTION_MACRO_GETALL);
 	}
 
-
+//prima rotirnava una lista di macrosettimanali, ma giocando tutto su any funzina ugualmente
+//e si esclude il vincolo con macrosettimanali... non importa definirlo
 // HttpClient API get() method => Fetch employees list
-	getAll(): Observable<MacroSettimanali> {
-		return this.http.get<MacroSettimanali>(API_EVOLUTION_MACRO_GETALL)
+	getAll(): Observable<any> {
+		return this.http.get(API_EVOLUTION_MACRO_GETALL)
 		.pipe(
 		retry(1),
 		catchError(this.handleError)
