@@ -17,7 +17,6 @@ export abstract class BaseTableComponent implements OnInit {
 	items: any[];//contiene i record da visualizzare 
 	arrayConNumerazionePaginePerFooter : Array<number>;//array di numeri consecuti x per sfruttare ngfor in html alla fine è come fare un for da 1 a tot
 	paginaIniziale : number = 0;//environment.inizioDaPagina;
-	inputName : string = '';
 	numeroDiRecordTotali : number =0;
 	numeroMassimopagineDelFooter : number= 0;//environment.numeroMassimopagineDelFooter;
 	numeroPagineMassimoPerQuestoFooter : number = 1;//in caso ci siano meno o più pagine di quelle consentite si definisce questo nell'init

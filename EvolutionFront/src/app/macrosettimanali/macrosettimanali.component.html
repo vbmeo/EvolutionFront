@@ -1,25 +1,27 @@
 <!-- necessita di icone "../node_modules/font-awesome/css/font-awesome.css" in style previa istalazione
 e ovviamente bootstrap -->
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
 
 <div class="container custom-container-2">
 	 <div class="no-data text-center" *ngIf="listaOggettiObservable.length == 0">
 		<p>Macro Settimanali</p>
 		<button class="btn btn-outline-primary" routerLink="/insert-macro">Add Macro</button>
 	</div>
-         <label>Filter </label>
-         <input  type="text"  id="inputName" [(ngModel)]="inputName"/>
-         <input type="button"  value="Apply"/>
    </div>
  <div class="col-md-10 col-md-offset-1">
 	<div class="panel panel-default panel-table">
     <!-- Default panel contents -->
-    <div class='panel-heading'>Product List</div>
     <div class='panel-body'>
-         <table id="tabellaMacro" class="table table-striped table-bordered table-list">
-            <thead>
-              <th scope="col" >Id</th>
-				<th data-sortable="true" scope="col">Data</th>
+		 <table id="tabella" class="table table-striped table-bordered table-list w-auto"
+		 	data-toggle="table" 
+       		data-classes="table table-hover table-condensed"
+		 	data-striped="true"
+			data-sort-name="Quality"
+			data-sort-order="desc" >
+            <thead >
+                <th scope="col" >Id</th>
+				<th data-sortable="true" sortBy="data" data-sortable="true" scope="col">Data</th>
 				<th id="Calorie" scope="col" data-toggle="tooltip" data-placement="bottom" title="Colorie medie giornaliere">Calorie</th>
 				<th scope="col" >Calorie TOT</th>
 				<th scope="col" >Carboidrati</th>
@@ -29,7 +31,7 @@ e ovviamente bootstrap -->
 				<th scope="col" class="align-items-center"><em class="fa fa-cog"></em></th>
             </thead>
             <tbody>
-               <tr *ngFor="let macro of items">
+			   <tr *ngFor="let macro of items" aria-controls="tableSortExample" scope="col">
                  	<td>{{macro.id}}</td>
 					<td>{{macro.data}}</td>
 					<!-- manda ad una funzione typescript in component da formattare le calorie / 7 in intero -->
@@ -73,4 +75,14 @@ e ovviamente bootstrap -->
 			</div>   
 
 
+<script lang="javascript">
 
+$(document).ready(function () {
+	alert("rady");
+$('#tabella').DataTable({
+"order": [[ 3, "desc" ]]
+});
+$('.dataTables_length').addClass('bs-select');
+});
+
+</script>

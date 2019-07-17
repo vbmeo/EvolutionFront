@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-
+import {macroSettimanaliI} from '../model/Macrosettimanalii';//già interfaccia
 
 
 import { environment } from '../../environments/environment'; //il file dove sono contenute costanti come gli indirizzi server json
@@ -15,7 +15,9 @@ const API_EVOLUTION_MACRO_GETALL = environment.urlBase + environment.urlMacro;
 })
 export class MacroSettimanaliService {
 	
+
 	constructor(private http: HttpClient) { }
+
 
 	// Http Options
 	httpOptions = {
@@ -24,8 +26,16 @@ export class MacroSettimanaliService {
 		})
 	}  
 
-	getArray() {
-	   return this.http.get(API_EVOLUTION_MACRO_GETALL);
+	getArray() : macroSettimanaliI[]{
+	    this.http.get<macroSettimanaliI[]>(API_EVOLUTION_MACRO_GETALL).subscribe(data2 => {
+				var arrayDiUtenti3: macroSettimanaliI[] = [];
+				data2.forEach(function(element) {
+					console.log("inserisco in array da json  '" + element.id) + "'";
+						arrayDiUtenti3.push(element);
+					});
+				return arrayDiUtenti3;
+			   });
+		return null;
 	}
 
 //prima rotirnava una lista di macrosettimanali, ma giocando tutto su any funzina ugualmente
@@ -39,6 +49,9 @@ export class MacroSettimanaliService {
 		)
 	}
 
+	getAllMacro() : Observable<macroSettimanaliI[]>{
+		return this.http.get<macroSettimanaliI[]>(API_EVOLUTION_MACRO_GETALL);
+	}
 
 
      // Error handling 

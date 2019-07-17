@@ -1,6 +1,6 @@
+ import {macroSettimanaliI} from '../model/macrosettimanalii'
 
-
-export class MacroSettimanali {
+export class MacroSettimanali implements macroSettimanaliI {
 	  public id: number;
 	  public data: Date;
 	  public calorie_sett : number;
@@ -8,9 +8,6 @@ export class MacroSettimanali {
 	  public proteine_sett: number;
 	  public grassi_sett: number;
 	  public alcool_sett: number;
-	  
-	  
-	
 	
 	constructor( id: number, data : Date,  calorie_sett: number,
 			 carboidrati_sett: number,  proteine_sett: number,
